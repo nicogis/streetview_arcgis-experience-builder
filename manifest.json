@@ -1,0 +1,27 @@
+{
+  "name": "streetView",
+  "label": "Street View",
+  "type": "widget",
+  "version": "1.20.0",
+  "exbVersion": "1.20.0",
+  "author": "nicogis",
+  "description": "Open Google Street View from a map click",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "dependency": [
+    "jimu-arcgis"
+  ],
+  "properties": {},
+  "translatedLocales": [
+    "en",
+    "it",
+    "zh-cn",
+    "fr",
+    "de",
+    "es"
+  ],
+  "defaultSize": {
+    "width": 420,
+    "height": 620
+  }
+}
