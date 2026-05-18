@@ -26,7 +26,7 @@ A custom ArcGIS Experience Builder widget that opens Google Street View from a m
 
 The **embedded Street View mode** (using a Google Maps Embed API key) displays a Google Maps iframe inside the same page as an ArcGIS map.
 
-This **may violate** the [Google Maps Platform Terms of Service](https://cloud.google.com/maps-platform/terms), specifically **§3.2.4 — Restrictions Against Misusing the Services**, which prohibits using Google Maps content on the same screen as a competing mapping platform.
+This **may violate** the [Google Maps Platform Terms of Service](https://cloud.google.com/maps-platform/terms), specifically **§3.2.3 (e) — Restrictions Against Misusing the Services**, which prohibits using Google Maps content on the same screen as a competing mapping platform.
 
 > "Customer will not use the Google Maps Core Services in a Customer Application that is a navigation, mapping, or geospatial application that competes with Google Maps or Google Earth."
 
