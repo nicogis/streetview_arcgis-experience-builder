@@ -22,6 +22,22 @@ A custom ArcGIS Experience Builder widget that opens Google Street View from a m
   - German
   - Spanish
 
+## ⚠️ Important — Google Maps Platform Terms of Service
+
+The **embedded Street View mode** (using a Google Maps Embed API key) displays a Google Maps iframe inside the same page as an ArcGIS map.
+
+This **may violate** the [Google Maps Platform Terms of Service](https://cloud.google.com/maps-platform/terms), specifically **§3.2.4 — Restrictions Against Misusing the Services**, which prohibits using Google Maps content on the same screen as a competing mapping platform.
+
+> "Customer will not use the Google Maps Core Services in a Customer Application that is a navigation, mapping, or geospatial application that competes with Google Maps or Google Earth."
+
+**Recommendations:**
+
+- If you need to comply with Google's ToS, use the **"New tab"** open mode instead — Street View opens in a separate browser tab, fully separate from the ArcGIS map.
+- Review the terms with your legal team before using the embedded mode in a production environment.
+- This widget is provided as-is. The authors take no responsibility for any ToS violations arising from its use.
+
+---
+
 ## How It Works
 
 When the widget is connected to a map:
@@ -31,7 +47,7 @@ When the widget is connected to a map:
 3. The point is converted to WGS84 if needed
 4. A Google Street View URL is generated
 5. The widget either:
-   - shows Street View directly inside the widget, or
+   - shows Street View directly inside the widget (embedded iframe), or
    - opens Street View in a new browser tab
 
 ## Requirements
@@ -66,12 +82,12 @@ Example:
 
 Shows Street View directly inside the widget.
 
-- With Google API key: embedded Street View iframe
+- With Google API key: embedded Street View iframe — **see ToS warning above**
 - Without Google API key: compact panel with coordinates and external link only
 
 ### `new-tab`
 
-Opens Google Street View in a new browser tab.
+Opens Google Street View in a new browser tab. **This mode is ToS-compliant.**
 
 ## Installation
 
@@ -94,7 +110,7 @@ npm start
 3. Select the target map widget
 4. Optionally set:
    - widget title
-   - Google Maps Embed API key
+   - Google Maps Embed API key *(see ToS warning above)*
    - open mode
    - center map on clicked point
 
@@ -131,8 +147,9 @@ streetView/
 ## Notes
 
 - Embedded Street View requires a valid Google Maps Embed API key
-- Without the API key, the widget still works using an external Google Maps / Street View link
+- Without the API key, the widget works using an external Google Maps / Street View link opened in a new tab
 - The marker is temporary and can be cleared using the widget button
+- For ToS-compliant usage, prefer the **"New tab"** open mode
 
 ## License
 

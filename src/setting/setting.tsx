@@ -25,10 +25,7 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   }
 
   onMapWidgetSelected = (useMapWidgetIds: string[]) => {
-    this.props.onSettingChange({
-      id: this.props.id,
-      useMapWidgetIds
-    })
+    this.props.onSettingChange({ id: this.props.id, useMapWidgetIds })
   }
 
   onApiKeyChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +57,8 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
   }
 
   render () {
+    const hasApiKey = Boolean(this.props.config.googleEmbedApiKey?.trim())
+
     return (
       <div className="widget-setting-street-view p-2" style={{ width: '100%' }}>
         {this.renderSectionTitle(this.nls('mapSection'))}
@@ -126,6 +125,23 @@ export default class Setting extends React.PureComponent<AllWidgetSettingProps<I
               />
             </div>
           </SettingRow>
+
+          {hasApiKey && (
+            <SettingRow>
+              <div style={{
+                ...this.fieldContainerStyle,
+                fontSize: '11px',
+                color: '#856404',
+                background: '#fff3cd',
+                border: '1px solid #ffc107',
+                borderRadius: '4px',
+                padding: '8px',
+                lineHeight: '1.4'
+              }}>
+                {this.nls('tosWarning')}
+              </div>
+            </SettingRow>
+          )}
         </SettingSection>
       </div>
     )

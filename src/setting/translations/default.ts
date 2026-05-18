@@ -27,5 +27,6 @@ export default {
   openMode: 'How to open Street View',
   modeCustomPopup: 'Show inside the widget',
   modeNewTab: 'Open in a new tab',
-  centerMapOnClick: 'Center map on clicked point'
+  centerMapOnClick: 'Center map on clicked point',
+  tosWarning: '⚠️ Embedding Street View alongside a third-party map may violate Google Maps Platform Terms of Service (§3.2.4). Use at your own risk.'
 }
