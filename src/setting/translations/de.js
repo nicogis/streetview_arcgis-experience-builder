@@ -9,5 +9,5 @@ System.register([], function (_export) {return {execute: function () {_export({
   modeCustomPopup: 'Im Widget anzeigen',
   modeNewTab: 'In neuem Tab öffnen',
   centerMapOnClick: 'Karte auf geklickten Punkt zentrieren',
-  tosWarning: '⚠️ Das Einbetten von Street View neben einer Drittanbieter-Karte kann gegen die Google Maps Platform Nutzungsbedingungen (§3.2.4) verstoßen. Nutzung auf eigene Gefahr.'
+  tosWarning: '⚠️ Das Einbetten von Street View neben einer Drittanbieter-Karte kann gegen die Google Maps Platform Nutzungsbedingungen (§3.2.3 (e)) verstoßen. Nutzung auf eigene Gefahr.'
 })}}});
