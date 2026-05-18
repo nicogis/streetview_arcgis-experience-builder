@@ -103,6 +103,14 @@ Then start or restart the Experience Builder client:
 npm start
 ~~~
 
+### ArcGIS Enterprise Portal
+
+Custom widgets can be uploaded directly to Experience Builder on ArcGIS Enterprise without a developer environment.
+
+> For detailed steps see the official documentation:
+> [Add custom widgets — ArcGIS Experience Builder](https://doc.arcgis.com/en/experience-builder/12.0/configure-widgets/add-custom-widgets.htm)
+
+
 ## Builder Setup
 
 1. Add the widget to the page
