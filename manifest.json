@@ -2,7 +2,7 @@
   "name": "streetView",
   "label": "Street View",
   "type": "widget",
-  "version": "1.20.0",
+  "version": "1.0.0",
   "exbVersion": "1.20.0",
   "author": "nicogis",
   "description": "Open Google Street View from a map click",
