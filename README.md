@@ -2,6 +2,17 @@
 
 A custom ArcGIS Experience Builder widget that opens Google Street View from a map click.
 
+
+## 📦 Download
+
+If you are using this widget with ArcGIS Enterprise / Experience Builder, please download the ready-to-use package from the Releases section rather than downloading the repository source code.
+
+👉 [Download the latest release](https://github.com/nicogis/streetview_arcgis-experience-builder/releases/)
+
+The release includes the packaged widget ready for deployment and the appropriate build for supported ArcGIS Enterprise versions.
+
+> **Note:** The **Code → Download ZIP** option on GitHub downloads the source code and is intended for developers who want to modify or build the widget themselves.
+
 ## Features
 
 - Click on the map to capture a point
