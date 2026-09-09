@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { React, jsx, type AllWidgetProps, type IntlShape } from 'jimu-core'
+import { React, jsx, type AllWidgetProps, WidgetState } from 'jimu-core'
 import { JimuMapViewComponent, type JimuMapView } from 'jimu-arcgis'
 import { Button } from 'jimu-ui'
 import Graphic from 'esri/Graphic'
@@ -8,7 +8,7 @@ import type { IMConfig } from '../config'
 import defaultMessages from './translations/default'
 import { getStyle } from './style'
 
-type State = {
+interface State {
   lat?: number
   lon?: number
   streetViewUrl?: string
@@ -27,8 +27,10 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
   private markerGraphic: Graphic | null = null
 
   nls = (id: keyof typeof defaultMessages): string => {
-    const intl = this.props.intl as IntlShape | undefined
-    return intl ? intl.formatMessage({ id, defaultMessage: defaultMessages[id] }) : defaultMessages[id]
+      return this.props.intl.formatMessage({
+          id,
+          defaultMessage: defaultMessages[id]
+      })
   }
 
   componentWillUnmount (): void {
@@ -37,39 +39,43 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     this.jimuMapView = null
   }
 
-  private removeClickHandler = (): void => {
+  private readonly removeClickHandler = (): void => {
     if (this.clickHandle) {
       this.clickHandle.remove()
       this.clickHandle = null
     }
   }
 
-  private onActiveViewChange = (jimuMapView: JimuMapView): void => {
+  private readonly onActiveViewChange = (jimuMapView: JimuMapView): void => {
     if (!jimuMapView?.view) return
-    if (this.jimuMapView?.view === jimuMapView.view) return
+
+    if (this.jimuMapView?.view === jimuMapView.view) {
+      this.addClickHandler()
+      return
+    }
 
     this.removeClickHandler()
     this.clearCurrentPoint()
 
     this.jimuMapView = jimuMapView
-    this.clickHandle = jimuMapView.view.on('click', this.onMapClick)
+    this.addClickHandler()
   }
 
-  private onMapClick = (event: __esri.ViewClickEvent): void => {
+  private readonly onMapClick = (event: __esri.ViewClickEvent): void => {
     const view = this.jimuMapView?.view
-    if (!view || !event.mapPoint || !this.state.captureEnabled) return
+    if (!view || !event.mapPoint || !this.state.captureEnabled || !this.isWidgetOpened()) return
 
-    const clickedPoint = event.mapPoint.clone() as __esri.Point
+    const clickedPoint = event.mapPoint.clone()
     const wgs84Point = this.toWgs84(clickedPoint)
     if (!wgs84Point) return
 
     this.setMarker(clickedPoint)
 
-    if (this.props.config.centerMapOnClick !== false) {
+    if (this.props.config.centerMapOnClick ?? true) {
       view.goTo(
         { center: clickedPoint },
         { animate: false }
-      ).catch(() => {})
+      ).catch(() => undefined)
     }
 
     const lat = Number(wgs84Point.latitude.toFixed(6))
@@ -104,7 +110,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     return null
   }
 
-  private setMarker = (point: __esri.Point): void => {
+  private readonly setMarker = (point: __esri.Point): void => {
     const view = this.jimuMapView?.view
     if (!view) return
 
@@ -133,15 +139,16 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
 
     // Micro-goTo al centro corrente: forza il renderer a ridisegnare
     // senza spostare la mappa visivamente.
-    if (this.props.config.centerMapOnClick === false) {
+      if (!(this.props.config.centerMapOnClick ?? true)) {
       const center = view.center?.clone()
       if (center) {
-        view.goTo({ center }, { animate: false }).catch(() => {})
+          view.goTo({ center }, { animate: false }).catch(() => undefined)
       }
     }
   }
 
-  private clearMarker = (): void => {
+
+  private readonly clearMarker = (): void => {
     const view = this.jimuMapView?.view
 
     if (view && this.markerGraphic) {
@@ -151,7 +158,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     this.markerGraphic = null
   }
 
-  private refreshViewAfterClear = (): void => {
+  private readonly refreshViewAfterClear = (): void => {
     const view = this.jimuMapView?.view
     if (!view) return
 
@@ -170,11 +177,11 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
       },
       { animate: false }
     ).then(() => {
-      view.goTo({ center }, { animate: false }).catch(() => {})
-    }).catch(() => {})
+      view.goTo({ center }, { animate: false }).catch(() => undefined)
+    }).catch(() => undefined)
   }
 
-  private clearCurrentPoint = (): void => {
+  private readonly clearCurrentPoint = (): void => {
     this.clearMarker()
 
     this.setState({
@@ -187,7 +194,7 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     })
   }
 
-  private toggleCapture = (): void => {
+  private readonly toggleCapture = (): void => {
     this.setState((prevState) => ({
       captureEnabled: !prevState.captureEnabled
     }))
@@ -247,9 +254,31 @@ export default class Widget extends React.PureComponent<AllWidgetProps<IMConfig>
     )
   }
 
-  private getWidgetTitle = (): string => {
+  private readonly getWidgetTitle = (): string => {
     const configuredTitle = this.props.config.widgetTitle?.trim()
     return configuredTitle || this.nls('title')
+  }
+
+  private readonly isWidgetOpened = (): boolean => {
+    return this.props.state == null || this.props.state === WidgetState.Opened
+  }
+
+  private readonly addClickHandler = (): void => {
+    const view = this.jimuMapView?.view
+
+    if (!view || this.clickHandle || !this.isWidgetOpened()) return
+
+    this.clickHandle = view.on('click', this.onMapClick)
+  }
+
+  componentDidUpdate (prevProps: AllWidgetProps<IMConfig>): void {
+    if (prevProps.state !== this.props.state) {
+      if (this.isWidgetOpened()) {
+        this.addClickHandler()
+      } else {
+        this.removeClickHandler()
+      }
+    }
   }
 
   render () {
